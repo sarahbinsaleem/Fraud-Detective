@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fraud Detective — Game</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="center-screen">
+    <p class="round-label" id="round-label">1 / 15</p>
+
+    <div class="transaction-card" id="transaction-card">
+      <p>Loading transaction...</p>
+    </div>
+
+    <p class="feedback" id="feedback"></p>
+
+    <div class="answer-buttons">
+      <button class="btn-safe" id="safe-btn">🟢 SAFE</button>
+      <button class="btn-fraud" id="fraud-btn">🔴 FRAUD</button>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    requireAuth();
+
+    const TOTAL_ROUNDS = 15;
+    const params = new URLSearchParams(window.location.search);
+    const difficulty = sessionStorage.getItem('difficulty') || 'Easy';
+
+    let round = 1;
+    let score = 0;
+    let currentTransaction = null;
+    const startTime = Date.now();
+
+    const cardEl = document.getElementById('transaction-card');
+    const feedbackEl = document.getElementById('feedback');
+    const roundLabelEl = document.getElementById('round-label');
+    const safeBtn = document.getElementById('safe-btn');
+    const fraudBtn = document.getElementById('fraud-btn');
+
+    async function loadTransaction() {
+      feedbackEl.textContent = '';
+      feedbackEl.className = 'feedback';
+      safeBtn.disabled = false;
+      fraudBtn.disabled = false;
+      roundLabelEl.textContent = `${round} / ${TOTAL_ROUNDS} — ${difficulty}`;
+
+      currentTransaction = await api.getRandomTransaction(difficulty);
+      const t = currentTransaction;
+      const time = new Date(t.transactionTime).toLocaleTimeString();
+
+      cardEl.innerHTML = `
+        <p><span class="label">Merchant:</span> ${t.merchant}</p>
+        <p><span class="label">Amount:</span> SAR ${t.amount}</p>
+        <p><span class="label">Country:</span> ${t.country}</p>
+        <p><span class="label">Time:</span> ${time}</p>
+        <p><span class="label">Device:</span> ${t.device}</p>
+        <p><span class="label">Card Present:</span> ${t.cardPresent ? 'Yes' : 'No'}</p>
+      `;
+    }
+
+    async function handleAnswer(answer) {
+      safeBtn.disabled = true;
+      fraudBtn.disabled = true;
+
+      const result = await api.submitAnswer({ isFraud: currentTransaction.isFraud, answer });
+      if (result.correct) score++;
+
+      feedbackEl.textContent = result.correct ? '✅ Correct!' : '❌ Wrong!';
+      feedbackEl.className = `feedback ${result.correct ? 'correct' : 'wrong'}`;
+
+      setTimeout(async () => {
+        if (round < TOTAL_ROUNDS) {
+          round++;
+          loadTransaction();
+        } else {
+  const timeTaken = Math.round((Date.now() - startTime) / 1000);
+  await api.finishGame({ score, timeTaken, difficulty });
+  sessionStorage.setItem('lastScore', score);
+  sessionStorage.setItem('lastTotal', TOTAL_ROUNDS);
+  window.location.href = 'results.html';
+}
+      }, 800);
+    }
+
+    safeBtn.addEventListener('click', () => handleAnswer('SAFE'));
+    fraudBtn.addEventListener('click', () => handleAnswer('FRAUD'));
+
+    loadTransaction();
+  </script>
+</body>
+</html>

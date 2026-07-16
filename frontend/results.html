@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fraud Detective — Results</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="center-screen">
+    <h1 id="score-label">Score: 0 / 15</h1>
+    <p id="accuracy-label" style="color:#94a3b8; font-size:1.2rem;">Accuracy: 0%</p>
+    <button class="btn-primary" id="play-again-btn" style="width:220px;">Play Again</button>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    requireAuth();
+
+    const params = new URLSearchParams(window.location.search);
+    const score = Number(sessionStorage.getItem('lastScore') || 0);
+const total = Number(sessionStorage.getItem('lastTotal') || 15);
+    const accuracy = total ? Math.round((score / total) * 100) : 0;
+
+    document.getElementById('score-label').textContent = `Score: ${score} / ${total}`;
+    document.getElementById('accuracy-label').textContent = `Accuracy: ${accuracy}%`;
+
+    document.getElementById('play-again-btn').addEventListener('click', () => {
+      window.location.href = 'home.html';
+    });
+  </script>
+</body>
+</html>

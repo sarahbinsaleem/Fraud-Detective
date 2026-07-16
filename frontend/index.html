@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fraud Detective — Login</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="center-screen">
+    <h1>🕵️ Fraud Detective</h1>
+
+    <form id="login-form" class="card">
+      <input type="text" id="login-identifier" placeholder="Email or Username" required />
+      <input type="password" id="login-password" placeholder="Password" required />
+      <p class="error-text" id="login-error"></p>
+      <button type="submit" class="btn-primary">Login</button>
+    </form>
+
+    <p>No account? <a href="#" id="show-register" style="color:#60a5fa;">Register</a></p>
+
+    <form id="register-form" class="card" style="display:none;">
+      <input type="text" id="register-username" placeholder="Username" required />
+      <input type="email" id="register-email" placeholder="Email" required />
+      <input type="password" id="register-password" placeholder="Password" required />
+      <p class="error-text" id="register-error"></p>
+      <button type="submit" class="btn-primary">Create Account</button>
+    </form>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    const loginForm = document.getElementById('login-form');
+    const registerForm = document.getElementById('register-form');
+    const showRegisterLink = document.getElementById('show-register');
+
+    showRegisterLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      const showingLogin = loginForm.style.display !== 'none';
+      loginForm.style.display = showingLogin ? 'none' : 'block';
+      registerForm.style.display = showingLogin ? 'block' : 'none';
+      showRegisterLink.textContent = showingLogin ? 'Back to login' : 'Register';
+    });
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const identifier = document.getElementById('login-identifier').value;
+      const password = document.getElementById('login-password').value;
+      const errorEl = document.getElementById('login-error');
+      errorEl.textContent = '';
+
+      try {
+        const data = await api.login({ identifier, password });
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = 'home.html';
+      } catch (err) {
+        errorEl.textContent = err.message;
+      }
+    });
+
+    registerForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('register-username').value;
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+      const errorEl = document.getElementById('register-error');
+      errorEl.textContent = '';
+
+      try {
+        const data = await api.register({ username, email, password });
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.location.href = 'home.html';
+      } catch (err) {
+        errorEl.textContent = err.message;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fraud Detective — Home</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="center-screen">
+    <h1 id="welcome-msg">Welcome!</h1>
+    <div class="menu-buttons">
+      <button class="btn-primary" data-difficulty="Easy">Play (Easy)</button>
+      <button class="btn-primary" data-difficulty="Medium">Play (Medium)</button>
+      <button class="btn-primary" data-difficulty="Hard">Play (Hard)</button>
+      <button class="btn-secondary" id="leaderboard-btn">Leaderboard</button>
+      <button class="btn-secondary" id="logout-btn">Logout</button>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    requireAuth();
+
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    document.getElementById('welcome-msg').textContent = `Welcome ${user.username || ''}!`;
+
+    document.querySelectorAll('[data-difficulty]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    sessionStorage.setItem('difficulty', btn.dataset.difficulty);
+    window.location.href = 'game.html';
+  });
+});
+    
+    document.getElementById('leaderboard-btn').addEventListener('click', () => {
+      window.location.href = 'leaderboard.html';
+    });
+
+    document.getElementById('logout-btn').addEventListener('click', logout);
+  </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  background: #0f172a;
+  color: #f1f5f9;
+  min-height: 100vh;
+}
+
+.center-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 320px;
+}
+
+.card input {
+  width: 100%;
+  padding: 0.6rem;
+  margin-bottom: 0.75rem;
+  border-radius: 6px;
+  border: none;
+  background: #334155;
+  color: #f1f5f9;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: #16a34a;
+  color: white;
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: #15803d;
+}
+
+.btn-secondary {
+  background: #334155;
+  color: white;
+  width: 100%;
+}
+
+.btn-secondary:hover {
+  background: #475569;
+}
+
+.error-text {
+  color: #f87171;
+  font-size: 0.9rem;
+  min-height: 1.2rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  text-align: center;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 220px;
+}
+
+.round-label {
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.transaction-card {
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 340px;
+}
+
+.transaction-card p {
+  margin-bottom: 0.5rem;
+}
+
+.transaction-card .label {
+  color: #94a3b8;
+}
+
+.answer-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.btn-safe {
+  background: #16a34a;
+  color: white;
+  padding: 0.8rem 1.5rem;
+}
+
+.btn-safe:hover {
+  background: #15803d;
+}
+
+.btn-fraud {
+  background: #dc2626;
+  color: white;
+  padding: 0.8rem 1.5rem;
+}
+
+.btn-fraud:hover {
+  background: #b91c1c;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.feedback {
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.1rem;
+  min-height: 1.5rem;
+}
+
+.feedback.correct {
+  color: #4ade80;
+}
+
+.feedback.wrong {
+  color: #f87171;
+}
+
+table {
+  width: 100%;
+  max-width: 400px;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.5rem;
+  border-bottom: 1px solid #334155;
+}
+
+th {
+  color: #94a3b8;
+}

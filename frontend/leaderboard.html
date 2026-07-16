@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fraud Detective — Leaderboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="center-screen">
+    <h1>🏆 Leaderboard</h1>
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Name</th><th>Score</th></tr>
+      </thead>
+      <tbody id="leaderboard-body">
+        <tr><td colspan="3">Loading...</td></tr>
+      </tbody>
+    </table>
+    <button class="btn-secondary" id="back-btn" style="width:220px; margin-top:1rem;">Back to Home</button>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    requireAuth();
+
+    async function loadLeaderboard() {
+      const body = document.getElementById('leaderboard-body');
+      try {
+        const scores = await api.getLeaderboard();
+        body.innerHTML = scores.map((s, i) => `
+          <tr>
+            <td>${i + 1}</td>
+           <td>${s.username}</td>
+<td>${s.highestScore}</td>
+          </tr>
+        `).join('') || '<tr><td colspan="3">No scores yet</td></tr>';
+      } catch (err) {
+        body.innerHTML = `<tr><td colspan="3">Error loading leaderboard</td></tr>`;
+      }
+    }
+
+    document.getElementById('back-btn').addEventListener('click', () => {
+      window.location.href = 'home.html';
+    });
+
+    loadLeaderboard();
+  </script>
+</body>
+</html>
